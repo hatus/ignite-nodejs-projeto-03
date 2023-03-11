@@ -6,7 +6,9 @@ export const app = fastify()
 const prisma = new PrismaClient()
 
 async function createuser(name: string, email: string) {
-  const user = await prisma.user.create({ data: { email, name } })
+  const user = await prisma.user.create({
+    data: { email, name, password_hash: '123' },
+  })
 
   return user
 }

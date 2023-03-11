@@ -10,10 +10,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    String @id @default(uuid())
-  name  String
-  email String @unique
+model Users {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
 
   @@map("users")
+}
+
+model CheckIns {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  validated_at DateTime?
+
+  @@map("check_ins")
+}
+
+model Gyms {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  phone       String?
+  latitue     Decimal
+  longitude   Decimal
+
+  @@map("gyms")
 }
