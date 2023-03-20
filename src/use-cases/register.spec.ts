@@ -1,16 +1,21 @@
-import { expect, describe, it } from 'vitest'
+import { expect, describe, it, beforeEach } from 'vitest'
+import { compare } from 'bcryptjs'
 
 import { RegisterUseCase } from './register'
-import { compare } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
-describe('Register Use Case', () => {
-  it('should be able to register', async () => {
-    const usersRepo = new InMemoryUsersRepository()
-    const registerUseCase = new RegisterUseCase(usersRepo)
+let usersRepo: InMemoryUsersRepository
+let sut: RegisterUseCase
 
-    const { user } = await registerUseCase.execute({
+describe('Register Use Case', () => {
+  beforeEach(() => {
+    usersRepo = new InMemoryUsersRepository()
+    sut = new RegisterUseCase(usersRepo)
+  })
+
+  it('should be able to register', async () => {
+    const { user } = await sut.execute({
       email: 'john@example.com',
       name: 'john doe',
       password: '123123',
@@ -20,11 +25,7 @@ describe('Register Use Case', () => {
   })
 
   it('should hash user password upon registration', async () => {
-    const usersRepo = new InMemoryUsersRepository()
-
-    const registerUseCase = new RegisterUseCase(usersRepo)
-
-    const { user } = await registerUseCase.execute({
+    const { user } = await sut.execute({
       email: 'john@example.com',
       name: 'john doe',
       password: '123123',
@@ -39,20 +40,16 @@ describe('Register Use Case', () => {
   })
 
   it('should not be able to register with same email twice', async () => {
-    const usersRepo = new InMemoryUsersRepository()
-
-    const registerUseCase = new RegisterUseCase(usersRepo)
-
     const email = 'johndoe@example.com'
 
-    await registerUseCase.execute({
+    await sut.execute({
       email,
       name: 'john doe',
       password: '123123',
     })
 
     await expect(() =>
-      registerUseCase.execute({
+      sut.execute({
         email,
         name: 'john doe',
         password: '123123',
