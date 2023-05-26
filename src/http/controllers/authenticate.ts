@@ -19,7 +19,14 @@ export async function authenticate(
     const authenticateUseCase = makeAuthenticateUseCase()
     const { user } = await authenticateUseCase.execute({ email, password })
 
-    const token = await reply.jwtSign({}, { sign: { sub: user.id } })
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+        },
+      },
+    )
 
     return reply.status(200).send({ token })
   } catch (error) {
