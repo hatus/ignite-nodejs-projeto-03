@@ -5,7 +5,7 @@ import fastifyJwt from '@fastify/jwt'
 import { env } from './env'
 import { usersRoutes } from './http/controllers/users/routes'
 import { gymsRoutes } from './http/controllers/gyms/routes'
-import { checkInsRoutes } from './http/controllers/check-ins/route'
+import { checkInsRoutes } from './http/controllers/check-ins/routes'
 
 const app = fastify()
 
