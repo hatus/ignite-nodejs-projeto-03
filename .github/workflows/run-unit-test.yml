@@ -1,0 +1,21 @@
+name: Run Unit Tests
+
+on: [push]
+
+jobs:
+	run-unit-tests:
+		name: Run Unit Tests
+		runs-on: ubuntu-latest
+
+		steps:
+			- uses: actions/checkout@v3 	# baixa o código do github para a máquina
+
+			- uses: actions/setup-node@v3	# instala o node na máquina
+				with:
+					node-version: 18					# escolhe a versão do node a ser instalada
+					cache: 'npm'							# cria um cache das dependências, assim toda vez que rodar o workflow, vai ser reaproveitado o cache que já existia (de dependências instaladas)
+
+			- run: npm ci									# instala as dependências sem fazer qualquer tipo de verificação (ci)
+
+			- run: npm run test						# executa os testes unitários da nossa app
+
